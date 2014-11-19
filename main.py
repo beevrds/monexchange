@@ -1,8 +1,8 @@
 '''
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
-Version: Alpha 1.0
-Date modified: 15/11/2014 11.41 AM
+Version: Alpha 2.0
+Date modified: 19/11/2014 22.57 PM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -12,9 +12,9 @@ import json
 import urllib2
 from Tkinter import *
 import tkMessageBox
-from PIL import ImageTk, Image
 class Connection:
     def __init__(self):
+        #Try to connect The API 
         try:
             self.country = json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/countries'))
             self.mess = 'Pass'
@@ -23,62 +23,72 @@ class Connection:
 class App:
     def __init__(self, main):
         #Edit GUI Here
-        self.text = Label(main, text = 'to', bg = '#A9742B')
+        #Label
+        self.text = self.textlabel(main, 'to', '#A9742B')
+        self.text.config(font = 'Lato')
+        #Fillbox
         self.fill1 = self.textfill(value.money1)
-        self.fill2 = self.textfill(value.money2)
-        self.select1 = self.select(value.current1, country)
+        #Dropdown
+        self.select1 = self.select(value.curr1, country)
         self.select1.config(width=20)
-        self.select2 = self.select(value.current2, country)
+        self.select2 = self.select(value.curr2, country)
         self.select2.config(width=20)
-        self.button = Button(main, text = 'OK', command = 'Test')
+        #Button
+        self.button = Button(main, text = 'OK', command = self.printt)
+        self.button.config(height = 2, width = 6)
     def textfill(self, var_money):
+        #Create Text Fill <Entry>
         return Entry(main, textvariable = var_money, bg = '#fcb062')
     def select(self, inputvalues, list_country):
+        #Create Dropdown Menu
         return apply(OptionMenu, (main, inputvalues) + tuple(list_country))
+    def textlabel(self, main, your_text, color):
+        #Create Label
+        return Label(main, text = your_text, bg = color)
     def printt(self):
         '''Test Button'''
-        print current.money1.get()
-class Allva:
+        temp1 = value.money1.get()
+        temp2 = value.curr1.get()
+        temp3 = value.curr2.get()
+        temp4 = json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/convert?q=%s_%s&compact=y' % (short[temp2], short[temp3])))
+class Allvalues:
     '''
     Set All Values
     '''
     def __init__(self):
+        #All of Values in Program
         self.money1 = IntVar()
-        self.money2 = IntVar()
-        self.current1 = StringVar()
-        self.current2 = StringVar()
+        self.curr1 = StringVar()
+        self.curr2 = StringVar()
 def guipack():
-    '''
-    Build and Display Widgets in mainGUI
-    '''
+    #Build and Display Widgets in mainGUI
     mainGUI.fill1.place(x = 130, y = 200)
     mainGUI.select1.place(x = 10, y = 250)
     mainGUI.text.place(x = 190, y = 255)
     mainGUI.select2.place(x = 225, y = 250)
-##    mainGUI.button.pack()
+    mainGUI.button.place(x = 175, y = 300)
 def addcountry():
+    #Create and return List of Country
     country = list()
+    short_form = dict()
     for i in mainConnect.country['results'].keys():
         country.append(mainConnect.country['results'][i]['currencyName'])
-    return country
+        short_form[mainConnect.country['results'][i]['currencyName']] = mainConnect.country['results'][i]['currencyId']
+    return (country, short_form)
 main = Tk()
 main.title('monexchange')
 main.geometry('400x600')
 main.configure(background = '#A9742B')
-value = Allva()
+value = Allvalues()
 mainConnect = Connection()
 canvas = Canvas(main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
 canvas.pack()
-local_logo = Image.open("logoo2.gif")
-logo = ImageTk.PhotoImage(local_logo)
+logo = PhotoImage(file = "logoo2.gif")
 canvas.create_image(200, 80, image=logo)
-##panel = Label(main, image = logo)
-##panel.photo = local_logo
-##panel.pack()
 if mainConnect.mess != 'ok':
-    value.current1.set('Change Country')
-    value.current2.set('Change Country')
-    country = addcountry()
+    value.curr1.set('Change Country')
+    value.curr2.set('Change Country')
+    country, short = addcountry()
     mainGUI = App(main)
     guipack()
     main.mainloop()
