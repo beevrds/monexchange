@@ -12,6 +12,7 @@ import json
 import urllib2
 from Tkinter import *
 import tkMessageBox
+from PIL import ImageTk, Image
 class Connection:
     def __init__(self):
         try:
@@ -22,14 +23,16 @@ class Connection:
 class App:
     def __init__(self, main):
         #Edit GUI Here
-        self.textwelcome = Label(main, text = 'monexchange', bg = '#fcb062')
+        self.text = Label(main, text = 'to', bg = '#A9742B')
         self.fill1 = self.textfill(value.money1)
         self.fill2 = self.textfill(value.money2)
         self.select1 = self.select(value.current1, country)
+        self.select1.config(width=20)
         self.select2 = self.select(value.current2, country)
+        self.select2.config(width=20)
         self.button = Button(main, text = 'OK', command = 'Test')
     def textfill(self, var_money):
-        return Entry(main, textvariable = var_money)
+        return Entry(main, textvariable = var_money, bg = '#fcb062')
     def select(self, inputvalues, list_country):
         return apply(OptionMenu, (main, inputvalues) + tuple(list_country))
     def printt(self):
@@ -48,12 +51,11 @@ def guipack():
     '''
     Build and Display Widgets in mainGUI
     '''
-    mainGUI.textwelcome.pack()
-    mainGUI.fill1.pack()
-    mainGUI.fill2.pack()
-    mainGUI.select1.pack()
-    mainGUI.select2.pack()
-    mainGUI.button.pack()
+    mainGUI.fill1.place(x = 130, y = 200)
+    mainGUI.select1.place(x = 10, y = 250)
+    mainGUI.text.place(x = 190, y = 255)
+    mainGUI.select2.place(x = 225, y = 250)
+##    mainGUI.button.pack()
 def addcountry():
     country = list()
     for i in mainConnect.country['results'].keys():
@@ -61,10 +63,18 @@ def addcountry():
     return country
 main = Tk()
 main.title('monexchange')
-main.geometry('400x300')
-main.configure(background = '#fcb062')
+main.geometry('400x600')
+main.configure(background = '#A9742B')
 value = Allva()
 mainConnect = Connection()
+canvas = Canvas(main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
+canvas.pack()
+local_logo = Image.open("logoo2.gif")
+logo = ImageTk.PhotoImage(local_logo)
+canvas.create_image(200, 80, image=logo)
+##panel = Label(main, image = logo)
+##panel.photo = local_logo
+##panel.pack()
 if mainConnect.mess != 'ok':
     value.current1.set('Change Country')
     value.current2.set('Change Country')
