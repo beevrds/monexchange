@@ -54,8 +54,9 @@ class App:
         current2 = value.curr2.get()
         rate = mainConnect.thisrate(short[current1], short[current2])
         present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
-        self.text1 = self.textlabel(main, present)
-        self.text1.place(x = 150, y = 350)
+        self.text1 = self.textlabel(main, present, '#fcb062')
+        self.text1.place(x = 160, y = 350)
+        self.text1.config
 class Allvalues:
     '''
     Set All Values
