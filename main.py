@@ -53,10 +53,12 @@ class App:
         current1 = value.curr1.get()
         current2 = value.curr2.get()
         rate = mainConnect.thisrate(short[current1], short[current2])
-        present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
-        self.text1 = self.textlabel(main, present, '#fcb062')
-        self.text1.place(x = 160, y = 350)
-        self.text1.config
+        if len(rate) == 0:
+            tkMessageBox.showerror('Error!', 'Can\'t connect to rate API \n Please try again later!')
+        else:
+            present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
+            self.text1 = self.textlabel(main, present, '#fcb062')
+            self.text1.place(x = 160, y = 350)
 class Allvalues:
     '''
     Set All Values
@@ -93,6 +95,7 @@ canvas.pack()
 logo = PhotoImage(file = "logoo2.gif")
 canvas.create_image(200, 80, image=logo)
 if mainConnect.mess != 'ok':
+    value.money1.set('0')
     value.curr1.set('Change Country')
     value.curr2.set('Change Country')
     country, short = addcountry()
