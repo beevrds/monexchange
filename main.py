@@ -2,7 +2,7 @@
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
 Version: Alpha 2.0
-Date modified: 19/11/2014 22.57 PM
+Date modified: 22/11/2014 09.10 AM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -24,18 +24,19 @@ class App:
     def __init__(self, main):
         #Edit GUI Here
         #Label
-        self.text = self.textlabel(main, 'to', '#A9742B')
+        self.text = self.textlabel(main, 'TO ', '#A9742B')
         self.text.config(font = 'Lato')
         #Fillbox
         self.fill1 = self.textfill(value.money1)
+        self.fill1.config(width=40)
         #Dropdown
         self.select1 = self.select(value.curr1, country)
         self.select1.config(width=20)
         self.select2 = self.select(value.curr2, country)
         self.select2.config(width=20)
         #Button
-        self.button = Button(main, text = 'OK', command = self.printt)
-        self.button.config(height = 2, width = 6)
+        self.button = Button(main, text = 'EXCHANGE !', command = self.printt)
+        self.button.config(height = 2, width = 10)
     def textfill(self, var_money):
         #Create Text Fill <Entry>
         return Entry(main, textvariable = var_money, bg = '#fcb062')
@@ -62,11 +63,11 @@ class Allvalues:
         self.curr2 = StringVar()
 def guipack():
     #Build and Display Widgets in mainGUI
-    mainGUI.fill1.place(x = 130, y = 200)
+    mainGUI.fill1.place(x = 80, y = 200)
     mainGUI.select1.place(x = 10, y = 250)
     mainGUI.text.place(x = 190, y = 255)
     mainGUI.select2.place(x = 225, y = 250)
-    mainGUI.button.place(x = 175, y = 300)
+    mainGUI.button.place(x = 160, y = 300)
 def addcountry():
     #Create and return List of Country
     country = list()
