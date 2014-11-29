@@ -1,8 +1,8 @@
 '''
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
-Version: Alpha 2.0
-Date modified: 26/11/2014 1.00 PM
+Version: Beta 1
+Date modified: 29/11/2014 11.00 AM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -11,7 +11,7 @@ API : http://www.freecurrencyconverterapi.com/api
 import json
 import urllib2
 from Tkinter import *
-import tkMessageBox
+import tkMessageBox as Msgbox
 class Connection:
     def __init__(self):
         #Try to connect The API 
@@ -19,7 +19,7 @@ class Connection:
             self.country = json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/countries'))
             self.mess = 'Pass'
         except:
-            self.mess = tkMessageBox.showerror('Error!', 'Can\'t connect to API.')
+            self.mess = Msgbox.showerror('Error!', 'Can\'t connect to API.')
     def thisrate(self, val1, val2):
         return json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/convert?q=%s_%s&compact=y' % (val1, val2)))
 class App:
@@ -30,6 +30,8 @@ class App:
         #Fillbox
         self.fill1 = self.textfill(value.money1)
         self.fill1.config(width=40)
+        self.fill2 = self.textfill(value.present)
+        self.fill2.config(width=16, state='readonly', readonlybackground='#fcb062', font = ('', 20))
         #Dropdown
         self.select1 = self.select(value.curr1, country)
         self.select1.config(width=20)
@@ -38,9 +40,9 @@ class App:
         #Button
         self.button = Button(main, text = 'EXCHANGE !', command = self.calculate)
         self.button.config(height = 2, width = 10)
-    def textfill(self, var_money):
+    def textfill(self, var):
         #Create Text Fill <Entry>
-        return Entry(main, textvariable = var_money, bg = '#fcb062')
+        return Entry(main, textvariable = var, bg = '#fcb062')
     def select(self, inputvalues, list_country):
         #Create Dropdown Menu
         return apply(OptionMenu, (main, inputvalues) + tuple(list_country))
@@ -53,15 +55,14 @@ class App:
         current1 = value.curr1.get()
         current2 = value.curr2.get()
         if current1 == 'Change Country' or current2 == 'Change Country':
-            tkMessageBox.showerror('Error!', 'Plaese Select Country')
+            Msgbox.showerror('Error!', 'Please Select Country')
         else:
             rate = mainConnect.thisrate(short[current1], short[current2])
             if len(rate) == 0:
                 tkMessageBox.showerror('Error!', 'Can\'t connect to rate API \n Please try again later!')
             else:
                 present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
-                self.text1 = self.textlabel(main, present, '#fcb062')
-                self.text1.place(x = 160, y = 350)
+                value.present.set('%.4f' % present)
 class Allvalues:
     '''
     Set All Values
@@ -71,6 +72,7 @@ class Allvalues:
         self.money1 = StringVar()
         self.curr1 = StringVar()
         self.curr2 = StringVar()
+        self.present = StringVar()
 def guipack():
     #Build and Display Widgets in mainGUI
     mainGUI.fill1.place(x = 80, y = 200)
@@ -78,6 +80,7 @@ def guipack():
     mainGUI.text.place(x = 190, y = 255)
     mainGUI.select2.place(x = 225, y = 250)
     mainGUI.button.place(x = 160, y = 300)
+    mainGUI.fill2.place(x = 80, y = 350)
 def addcountry():
     #Create and return List of Country
     country = list()
@@ -90,6 +93,7 @@ def addcountry():
 main = Tk()
 main.title('monexchange')
 main.geometry('400x600')
+main.resizable(width=FALSE, height=FALSE)
 main.configure(background = '#A9742B')
 value = Allvalues()
 mainConnect = Connection()
@@ -99,6 +103,7 @@ logo = PhotoImage(file = "logoo2.gif")
 canvas.create_image(200, 80, image=logo)
 if mainConnect.mess != 'ok':
     value.money1.set('0')
+    value.present.set('0.0000')
     value.curr1.set('Change Country')
     value.curr2.set('Change Country')
     country, short = addcountry()
