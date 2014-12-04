@@ -35,12 +35,18 @@ class App:
         self.fill2.config(width=16, state='readonly', readonlybackground='#fcb062', font = ('', 20))
         #Dropdown
         self.select1 = self.select(value.curr1, country)
-        self.select1.config(width=20)
+        self.select1.config(width=20, highlightbackground = '#A9742B')
         self.select2 = self.select(value.curr2, country)
-        self.select2.config(width=20)
+        self.select2.config(width=20, highlightbackground = '#A9742B')
         #Button
         self.button = Button(main, text = 'EXCHANGE !', command = self.calculate)
         self.button.config(height = 2, width = 10)
+        #MenuBar
+        self.menuBar = Menu(main)
+        self.aboutMenu = Menu(self.menuBar, tearoff=0)
+        self.aboutMenu.add_command(label="About", command=self.about_window)
+        self.menuBar.add_cascade(label="About", menu=self.aboutMenu)
+        main.config(menu=self.menuBar)
     def textfill(self, var):
         #Create Text Fill <Entry>
         return Entry(main, textvariable = var, bg = '#fcb062')
@@ -67,6 +73,17 @@ class App:
                     value.present.set('%.4f' % present)
         except:
             Msgbox.showerror('Error!', 'Please Insert Integer (ex. 100)\n Or Float (ex. 120.75) Only -w-')
+    def about_window(self):
+        def thatOk():
+          about.destroy()
+        about = Toplevel(main, bg='#A9742B')
+        about.geometry('200x140')
+        about.title("About")
+        about_message = "monexchange by Thatchakon and Mathurin \n for PSIT Project \n Faculty of \n Information technology \n KMITL"
+        msg = Message(about, text=about_message, justify=CENTER, bg='#A9742B', font = ('', 10))
+        msg.pack()
+        button = Button(about, text="Ok", command=thatOk)
+        button.pack()
 class Allvalues:
     '''
     Set All Values
@@ -95,25 +112,26 @@ def addcountry():
             country.append(mainConnect.country['results'][i]['currencyName'])
             short_form[mainConnect.country['results'][i]['currencyName']] = mainConnect.country['results'][i]['currencyId']
     return (country, short_form)
-main = Tk()
-main.title('monexchange')
-main.geometry('400x450')
-main.resizable(width=FALSE, height=FALSE)
-main.configure(background = '#A9742B')
-value = Allvalues()
-mainConnect = Connection()
-canvas = Canvas(main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
-canvas.pack()
-logo = PhotoImage(file = "logoo2.gif")
-canvas.create_image(200, 80, image=logo)
-if mainConnect.mess != 'ok':
-    value.money1.set('0')
-    value.present.set('0.0000')
-    value.curr1.set('Change Country')
-    value.curr2.set('Change Country')
-    country, short = addcountry()
-    mainGUI = App(main)
-    guipack()
-    main.mainloop()
-else:
-    main.destroy()
+if __name__ == "__main__":
+    main = Tk()
+    main.title('monexchange')
+    main.geometry('400x450')
+    main.resizable(width=FALSE, height=FALSE)
+    main.configure(background = '#A9742B')
+    value = Allvalues()
+    mainConnect = Connection()
+    canvas = Canvas(main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
+    canvas.pack()
+    logo = PhotoImage(file = "logoo2.gif")
+    canvas.create_image(200, 80, image=logo)
+    if mainConnect.mess != 'ok':
+        value.money1.set('0')
+        value.present.set('0.0000')
+        value.curr1.set('Change Country')
+        value.curr2.set('Change Country')
+        country, short = addcountry()
+        mainGUI = App(main)
+        guipack()
+        main.mainloop()
+    else:
+        main.destroy()
