@@ -1,8 +1,8 @@
 '''
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
-Version: Beta 1
-Date modified: 29/11/2014 11.00 AM
+Version: 1.0
+Date modified: 04/12/2014 09.16 AM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -27,9 +27,10 @@ class App:
         #Edit GUI Here
         #Label
         self.text = self.textlabel(main, 'TO ', '#A9742B')
+        self.texta = self.textlabel(main, 'App Created & Developed : 11/11/2014 - 04/12/14', '#A9742B')
         #Fillbox
         self.fill1 = self.textfill(value.money1)
-        self.fill1.config(width=40)
+        self.fill1.config(width=22, font = ('', 14))
         self.fill2 = self.textfill(value.present)
         self.fill2.config(width=16, state='readonly', readonlybackground='#fcb062', font = ('', 20))
         #Dropdown
@@ -54,15 +55,18 @@ class App:
         money1 = value.money1.get()
         current1 = value.curr1.get()
         current2 = value.curr2.get()
-        if current1 == 'Change Country' or current2 == 'Change Country':
-            Msgbox.showerror('Error!', 'Please Select Country')
-        else:
-            rate = mainConnect.thisrate(short[current1], short[current2])
-            if len(rate) == 0:
-                tkMessageBox.showerror('Error!', 'Can\'t connect to rate API \n Please try again later!')
+        try:
+            if current1 == 'Change Country' or current2 == 'Change Country':
+                Msgbox.showerror('Error!', 'Please Select Country')
             else:
-                present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
-                value.present.set('%.4f' % present)
+                rate = mainConnect.thisrate(short[current1], short[current2])
+                if len(rate) == 0:
+                    Msgbox.showerror('Error!', 'Can\'t connect to rate API \n Please try again later!')
+                else:
+                    present = float(money1)*rate['%s_%s' % (short[current1], short[current2])]['val']
+                    value.present.set('%.4f' % present)
+        except:
+            Msgbox.showerror('Error!', 'Please Insert Integer (ex. 100)\n Or Float (ex. 120.75) Only -w-')
 class Allvalues:
     '''
     Set All Values
@@ -81,6 +85,7 @@ def guipack():
     mainGUI.select2.place(x = 225, y = 250)
     mainGUI.button.place(x = 160, y = 300)
     mainGUI.fill2.place(x = 80, y = 350)
+    mainGUI.texta.place(x = 70, y = 430)
 def addcountry():
     #Create and return List of Country
     country = list()
@@ -92,7 +97,7 @@ def addcountry():
     return (country, short_form)
 main = Tk()
 main.title('monexchange')
-main.geometry('400x600')
+main.geometry('400x450')
 main.resizable(width=FALSE, height=FALSE)
 main.configure(background = '#A9742B')
 value = Allvalues()
