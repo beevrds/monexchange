@@ -2,7 +2,7 @@
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
 Version: 1.0
-Date modified: 07/12/2014 12.10 AM
+Date modified: 12/12/2014 11.58 AM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -15,19 +15,19 @@ import tkMessageBox as Msgbox
 class Connection:
     #Connect the API
     def __init__(self):
-        #Try to connect The API 
+        '''Try to connect The API '''
         try:
             self.country = json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/countries'))
             self.mess = 'Pass'
         except:
             self.mess = Msgbox.showerror('Error!', 'Can\'t connect to API.')
     def thisrate(self, val1, val2):
-        #Return Rate of money
+        '''Return Rate of money'''
         return json.load(urllib2.urlopen('http://www.freecurrencyconverterapi.com/api/v2/convert?q=%s_%s&compact=y' % (val1, val2)))
 class App:
     #Main GUI
     def __init__(self, main):
-        #Edit GUI Here
+        '''GUI Editing Function'''
         #Label
         self.text = self.textlabel(main, 'TO ', '#A9742B')
         self.texta = self.textlabel(main, 'App Created & Developed : 11/11/2014 - 04/12/14', '#A9742B')
@@ -52,16 +52,16 @@ class App:
         self.menuBar.add_cascade(label="About", menu=self.aboutMenu)
         main.config(menu=self.menuBar)
     def textfill(self, var):
-        #Create Text Fill <Entry>
+        '''Create Text Fill <Entry>'''
         return Entry(start.main, textvariable = var, bg = '#fcb062')
     def select(self, inputvalues, list_country):
-        #Create Dropdown Menu
+        '''Create Dropdown Menu'''
         return apply(OptionMenu, (start.main, inputvalues) + tuple(list_country))
     def textlabel(self, main, your_text, color = '#A9742B'):
-        #Create Label
+        '''Create Label'''
         return Label(start.main, text = your_text, bg = color)
     def calculate(self):
-        #Calculate money exchange
+        '''Calculate money exchange'''
         money1 = value.money1.get()
         current1 = value.curr1.get()
         current2 = value.curr2.get()
@@ -78,22 +78,24 @@ class App:
         except:
             Msgbox.showerror('Error!', 'Please Insert Integer (ex. 100)\n Or Float (ex. 120.75) Only -w-')
     def call_calculate(self, event):
+        '''Calcultor calling function'''
         self.calculate()
     def about_window(self):
-        #About Menu Window
+        '''About Menu Window'''
         def thatOk():
-          about.destroy()
-        about = Toplevel(start.main, bg='#A9742B')
-        about.geometry('200x140')
+            '''Closing About Window if click OK'''
+            about.destroy()
+        about = Toplevel(start.main, bg='#FFFFFF')
+        about.geometry('250x150')
         about.resizable(width=FALSE, height=FALSE)
         about.title("About")
         about_message = "monexchange by Thatchakon and Mathurin \n for PSIT Project \n Faculty of \n Information technology \n KMITL"
-        msg = Message(about, text=about_message, justify=CENTER, bg='#A9742B', font = ('', 10))
+        msg = Message(about, text=about_message, justify=CENTER, bg='#FFFFFF', font = ('', 10))
         msg.pack()
         button = Button(about, text="Ok", command=thatOk)
         button.pack()
     def guipack(self):
-        #Build and Display Widgets in main
+        '''Build and Display Widgets in main'''
         self.fill1.place(x = 80, y = 200)
         self.select1.place(x = 10, y = 250)
         self.text.place(x = 190, y = 255)
@@ -104,13 +106,13 @@ class App:
 class Allvalues:
     #Set All Values
     def __init__(self):
-        #All of Values in Program
+        '''All of Values in Program'''
         self.money1 = StringVar()
         self.curr1 = StringVar()
         self.curr2 = StringVar()
         self.present = StringVar()
     def addcountry(self):
-        #Create and return List of Country
+        '''Create and return List of Country'''
         country = list()
         short_form = dict()
         for i in mainConnect.country['results'].keys():
@@ -121,12 +123,14 @@ class Allvalues:
 class Start():
     #Start App
     def __init__(self):
+        '''All About App's Structure'''
         self.main = Tk()
         self.main.title('monexchange')
         self.main.geometry('400x450')
         self.main.resizable(width=FALSE, height=FALSE)
         self.main.configure(background = '#A9742B')
     def run(self):
+        '''App GUI Setting'''
         canvas = Canvas(self.main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
         canvas.pack()
         logo = PhotoImage(file = "logoo2.gif")
