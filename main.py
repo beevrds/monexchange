@@ -2,7 +2,7 @@
 Program: monexchange
 Author: Mathurin (094) and Thatchakon (053)
 Version: 1.0
-Date modified: 13/12/2014 21.35 PM
+Date modified: 14/12/2014 17.04 PM
 Detail: Currency Exchanging Program by input number of money and
         select input's currency and another one currency which
         you want to exchange.
@@ -47,12 +47,11 @@ class App:
         self.button.config(height = 2, width = 10)
         #MenuBar
         self.menuBar = Menu(main)
-        self.aboutMenu = Menu(self.menuBar, tearoff=0)
-        self.aboutMenu.add_command(label="About", command=self.about_window)
-        self.menuBar.add_cascade(label="About", menu=self.aboutMenu)
-        self.exitMenu = Menu(self.menuBar, tearoff=0)
-        self.exitMenu.add_command(label="Exit", command=main.quit)
-        self.menuBar.add_cascade(label="Exit", menu=self.exitMenu)
+        self.this_menu = Menu(self.menuBar, tearoff=0)
+        self.this_menu.add_command(label="About", command=self.about_window)
+        self.this_menu.add_separator()
+        self.this_menu.add_command(label="Exit", command=start.destroy_main)
+        self.menuBar.add_cascade(label="Menu", menu=self.this_menu)
         main.config(menu=self.menuBar)
     def textfill(self, var):
         '''Create Text Fill <Entry>'''
@@ -149,7 +148,9 @@ class Start():
             mainGUI.guipack()
             self.main.mainloop()
         else:
-            self.main.destroy()
+            self.destroy_main()
+    def destroy_main(self):
+        self.main.destroy()
 start = Start()
 mainConnect = Connection()
 value = Allvalues()
