@@ -132,6 +132,7 @@ class Start():
         self.main.geometry('400x450')
         self.main.resizable(width=FALSE, height=FALSE)
         self.main.configure(background = '#A9742B')
+        self.main.wm_iconbitmap('logoo_ico.ico')
     def run(self):
         '''App GUI Setting'''
         canvas = Canvas(self.main, bd = 0, bg='#A9742B', width=400, height=160, highlightthickness=0, relief='ridge')
