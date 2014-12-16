@@ -88,9 +88,10 @@ class App:
             '''Closing About Window if click OK'''
             about.destroy()
         about = Toplevel(start.main, bg='#FFFFFF')
-        about.geometry('250x150')
+        about.geometry('250x150+500+200')
         about.resizable(width=FALSE, height=FALSE)
         about.title("About")
+        about.wm_iconbitmap('logoo_ico.ico')
         about_message = "monexchange by Thatchakon and Mathurin \n for PSIT Project \n Faculty of \n Information technology \n KMITL"
         msg = Message(about, text=about_message, justify=CENTER, bg='#FFFFFF', font = ('', 10))
         msg.pack()
@@ -128,7 +129,7 @@ class Start():
         '''All About App's Structure'''
         self.main = Tk()
         self.main.title('monexchange')
-        self.main.geometry('400x450')
+        self.main.geometry('400x450+400+100')
         self.main.resizable(width=FALSE, height=FALSE)
         self.main.configure(background = '#A9742B')
         self.main.wm_iconbitmap('logoo_ico.ico')
